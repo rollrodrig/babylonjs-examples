@@ -1,0 +1,28 @@
+<html>
+    <body>
+        <canvas id="canvas" width="600" height="600"></canvas>
+        <script src="babylon.max.js"></script>
+        <script src="vars.js"></script>
+        <script>
+            // https://www.babylonjs-playground.com/#20OAV9#325
+            var canvas = document.getElementById('canvas');
+            var engine = new Engine(canvas, true);
+            var createScene = function() {
+                var scene = new Scene(engine);
+                var light = new HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+                var sphere = MeshBuilder.CreateBox("sphere", {}, scene);
+                // Parameters : name, position, scene
+                var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 0, -10), scene);
+                // Targets the camera to a particular position. In this case the scene origin
+                camera.setTarget(BABYLON.Vector3.Zero());
+                camera.attachControl(canvas, true);
+                return scene;
+            }
+            var scene = createScene();
+            engine.runRenderLoop(function(){ // call every loop
+                scene.render();
+            });
+
+        </script>
+    </body>
+</html>

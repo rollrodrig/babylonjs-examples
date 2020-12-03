@@ -1,0 +1,37 @@
+<html>
+    <body>
+        <canvas id="canvas" width="600" height="600"></canvas>
+        <script src="babylon.max.js"></script>
+        <script src="vars.js"></script>
+        <script>
+            // https://www.babylonjs-playground.com/#20OAV9#325
+            var canvas = document.getElementById('canvas');
+            var engine = new Engine(canvas, true);
+            var createScene = function() {
+                var scene = new Scene(engine);
+                var camera = 
+                    new ArcRotateCamera("Camera", 
+                    -Math.PI / 2, Math.PI / 2, 2,
+                    Vector3.Zero(), scene);
+                camera.attachControl(canvas, true);
+                var box1 = MeshBuilder.CreateBox("box1", {}, scene);
+                var box2 = MeshBuilder.CreateBox("box2", {}, scene);
+                box2.position.x = 5
+                var box3 = MeshBuilder.CreateBox("box3", {}, scene);
+                box3.position.x = 2.5;
+                box3.position.z = 2.5;
+                
+                var light = 
+                    new BABYLON.DirectionalLight("DirectionalLight", 
+                    new BABYLON.Vector3(-10, -10, -10), scene);
+                
+                return scene;
+            }
+            var scene = createScene();
+            engine.runRenderLoop(function(){ // call every loop
+                scene.render();
+            });
+
+        </script>
+    </body>
+</html>

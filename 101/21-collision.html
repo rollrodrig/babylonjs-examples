@@ -1,0 +1,100 @@
+<html>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+        }
+        #canvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <body>
+        <canvas id="canvas" width="600" height="600"></canvas>
+        <script src="babylon.max.js"></script>
+        <script src="vars.js"></script>
+        <script>
+// https://www.babylonjs-playground.com/#20OAV9#325
+var canvas = document.getElementById('canvas');
+var engine = new Engine(canvas, true);
+var createScene = function() {
+    var scene = new Scene(engine);
+    
+    var light = 
+    new BABYLON.HemisphericLight("HemiLight", new BABYLON.Vector3(0, 1, 0), scene);
+    
+    // Need a free camera for collisions
+    var camera = 
+    new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 20, -30), scene);
+    camera.attachControl(canvas, true);
+
+    var ground = 
+    MeshBuilder.CreateGround("ground", 
+    {width: 100, height: 100, subdivisions: 4}, scene);
+    ground.material = new BABYLON.StandardMaterial("groundMat", scene);
+    ground.material.diffuseColor = new BABYLON.Color3(1, 1, 1);    
+    ground.material.backFaceCulling = false;
+    ground.position = new BABYLON.Vector3(0, 0, 0);
+    // ground.rotation = new BABYLON.Vector3(Math.PI / 2, 0, 0);
+
+
+    //Simple crate
+    var box = Mesh.CreateBox("crate", 2, scene);
+    box.material = new BABYLON.StandardMaterial("Mat", scene);
+    box.material.diffuseTexture = new BABYLON.Texture("textures/wood-texture.png", scene);
+    box.material.diffuseTexture.hasAlpha = true;
+    box.position = new BABYLON.Vector3(0, 1, 0);
+
+    var mat1 = new StandardMaterial("Mat1", scene);
+    mat1.diffuseTexture = new Texture("textures/brik.jpg", scene);
+    mat1.diffuseTexture.hasAlpha = true;
+    mat1.diffuseTexture.uScale = 3;
+    mat1.diffuseTexture.vScale = 3;
+    mat1.diffuseTexture.uOffset = 3;
+    mat1.diffuseTexture.vOffset = 3;
+    var wall1 = MeshBuilder.CreateBox("wall1", 
+    {width: 100, height: 10, depth: 5}, scene);
+    wall1.position = new Vector3(0,5,-50)
+    wall1.material = mat1;
+
+    var wall2 = MeshBuilder.CreateBox("wall1", 
+    {width: 100, height: 10, depth: 5}, scene);
+    wall2.material = new StandardMaterial("Mat2", scene);
+    wall2.material.diffuseTexture = new Texture("textures/brik.jpg", scene);
+    wall2.material.diffuseTexture.hasAlpha = true;
+    wall2.position = new Vector3(-50,5,0)
+    wall2.rotation = new Vector3(0, Math.PI/2, 0);
+
+    //Set gravity for the scene (G force like, on Y-axis)
+    scene.gravity = new BABYLON.Vector3(0, -0.9, 0);
+
+    // Enable Collisions
+    scene.collisionsEnabled = true;
+
+    //Then apply collisions and gravity to the active camera
+    camera.checkCollisions = true;
+    camera.applyGravity = true;
+    camera.collisionRadius = new BABYLON.Vector3(1, 1, 1)
+
+    //Set the ellipsoid around the camera (e.g. your player's size)
+    camera.ellipsoid = new BABYLON.Vector3(1, 1, 1);
+    // camera.ellipsoid = new BABYLON.Vector3(0.5, 1, 0.5);
+
+    //finally, say which mesh will be collisionable
+    ground.checkCollisions = true;
+    box.checkCollisions = true;
+    wall1.checkCollisions = true;
+    wall2.checkCollisions = true;
+
+
+
+    return scene;
+}
+var scene = createScene();
+engine.runRenderLoop(function(){ // call every loop
+    scene.render();
+});
+
+        </script>
+    </body>
+</html>

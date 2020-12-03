@@ -1,0 +1,30 @@
+<html>
+    <body>
+        <canvas id="canvas" width="600" height="600"></canvas>
+        <script src="babylon.max.js"></script>
+        <script src="vars.js"></script>
+        <script>
+            var canvas = document.getElementById('canvas');
+            var engine = new Engine(canvas, true);
+            var createScene = function() {
+                var scene = new Scene(engine);
+                var camera = new ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 2, Vector3.Zero(), scene);
+                camera.attachControl(canvas, true);
+                var light1 = new HemisphericLight("light1", new Vector3(1, 1, 0), scene);
+                var light2 = new PointLight("light2", new Vector3(0, 1, -1), scene);
+                
+                var box = MeshBuilder.CreateBox("box", {}, scene); // default box
+                var myBox = MeshBuilder.CreateBox("myBox", {height: 5, width: 2, depth: 0.5}, scene);
+                var sphere = MeshBuilder.CreateSphere("sphere", {diameter:3, arc:0.5}, scene);
+                var myPlane = MeshBuilder.CreatePlane("myPlane", {width: 5, height: 2}, scene);
+                var ground = MeshBuilder.CreateGround("ground", {width: 6, height: 4, subdivisions: 4}, scene);
+                return scene;
+            }
+            var scene = createScene();
+            engine.runRenderLoop(function(){ // call every loop
+                scene.render();
+            });
+
+        </script>
+    </body>
+</html>

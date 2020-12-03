@@ -1,0 +1,47 @@
+<html>
+    <body>
+        <canvas id="canvas" width="600" height="600"></canvas>
+        <script src="babylon.max.js"></script>
+        <script src="vars.js"></script>
+        <script>
+            // https://www.babylonjs-playground.com/#20OAV9#325
+            var canvas = document.getElementById('canvas');
+            var engine = new Engine(canvas, true);
+            var createScene = function() {
+                var scene = new Scene(engine);
+                var light = new HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+                var box = MeshBuilder.CreateBox("sphere", {}, scene);
+                
+                // Parameters: name, position, scene
+                var camera = new BABYLON.FollowCamera("FollowCam", new BABYLON.Vector3(0, 10, -10), scene);
+
+                // The goal distance of camera from target
+                camera.radius = 30;
+
+                // The goal height of camera above local origin (centre) of target
+                camera.heightOffset = 10;
+
+                // The goal rotation of camera around local origin (centre) of target in x y plane
+                camera.rotationOffset = 0;
+
+                // Acceleration of camera in moving from current to goal position
+                camera.cameraAcceleration = 0.005
+
+                // The speed at which acceleration is halted
+                camera.maxCameraSpeed = 10
+
+                // This attaches the camera to the canvas
+                camera.attachControl(canvas, true);
+                
+                camera.lockedTarget = box;
+                    
+                return scene;
+            }
+            var scene = createScene();
+            engine.runRenderLoop(function(){ // call every loop
+                scene.render();
+            });
+
+        </script>
+    </body>
+</html>

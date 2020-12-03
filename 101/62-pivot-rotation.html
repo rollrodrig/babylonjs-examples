@@ -1,0 +1,68 @@
+<html>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+        }
+        #canvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <body>
+        <canvas id="canvas" width="600" height="600"></canvas>
+        <script src="babylon.max.js"></script>
+        <script src="vars.js"></script>
+        <script>
+var canvas = document.getElementById('canvas');
+var engine = new Engine(canvas, true);
+var createScene = function() {
+    var scene = new Scene(engine);
+    light(scene);
+    camera(scene);
+    showAxis(scene, 10)
+    var box1 = MeshBuilder.CreateBox("box1", {size: 1}, scene);
+    // box.setPivotPoint(new BABYLON.Vector3(-1, -1, -1));
+    box1.rotation.y = degToRadians(45);
+    box1.position.y = 3;
+
+
+    var pivot = BABYLON.MeshBuilder.CreateSphere("pivot", {diameter:.2}, scene);
+    pivot.material = new BABYLON.StandardMaterial("pivotmat", scene);
+    pivot.material.diffuseColor = new BABYLON.Color3(1, 0, 0);
+
+    var origin = BABYLON.MeshBuilder.CreateSphere("origin", {diameter:.2}, scene);
+    origin.material = new BABYLON.StandardMaterial("originmat", scene);
+    origin.material.diffuseColor = new BABYLON.Color3(1, 1, 0);
+
+
+    var box = MeshBuilder.CreateBox("box", {size: 2}, scene);
+    box.material = new BABYLON.StandardMaterial("boxmat", scene);
+    box.material.diffuseColor = new BABYLON.Color3(1, 1, 0);
+    box.material.wireframe = true;
+    
+
+    pivot.parent = box;
+    origin.parent = box;
+    box.position.y = 1;
+
+    box.setPivotPoint(new BABYLON.Vector3(-1, -1, -1));
+    pivot.position = new BABYLON.Vector3(-1, -1, -1)
+    box.rotation.y = degToRadians(45);
+
+    return scene;
+}
+var scene = createScene();
+engine.runRenderLoop(function(){ // call every loop
+    scene.render();
+});
+//When click event is raised
+// window.addEventListener("click", function () {
+//    // We try to pick an object
+//    var pickResult = scene.pick(scene.pointerX, scene.pointerY);
+// })
+
+
+        </script>
+    </body>
+</html>

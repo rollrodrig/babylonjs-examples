@@ -1,0 +1,90 @@
+<html>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+        }
+        #canvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <body>
+        <canvas id="canvas" width="600" height="600"></canvas>
+        <script src="babylon.max.js"></script>
+        <script src="vars.js"></script>
+        <script>
+// https://www.babylonjs-playground.com/#20OAV9#325
+var canvas = document.getElementById('canvas');
+var engine = new Engine(canvas, true);
+var createScene = function() {
+    var scene = new Scene(engine);
+    var light = 
+    new BABYLON.HemisphericLight("HemiLight", new BABYLON.Vector3(0, 1, 0), scene);
+    var camera = 
+    new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 3, -10), scene);
+    camera.attachControl(canvas, true);
+
+
+    var material = new StandardMaterial("greenMat", scene);
+        material.emissiveColor = new Color3(0, 1, 0);
+
+
+    var box = MeshBuilder.CreateBox("shooter", {}, scene);
+    box.material = material;
+    box.actionManager = new BABYLON.ActionManager(scene);
+    box.actionManager.registerAction(
+        new BABYLON.InterpolateValueAction(
+            BABYLON.ActionManager.OnPickTrigger,
+            light,
+            'diffuse',
+            BABYLON.Color3.Red(),
+            1000
+        )
+    ).then(
+        new BABYLON.SetValueAction(
+            BABYLON.ActionManager.NothingTrigger,
+            box.material,
+            'wireframe',
+            true
+        )
+    );
+
+
+
+    var box2 = MeshBuilder.CreateBox("box2", {}, scene);
+    box2.position.x = 2;
+    box2.actionManager = new BABYLON.ActionManager(scene);
+    box2.actionManager.registerAction(
+        new BABYLON.ExecuteCodeAction(
+            BABYLON.ActionManager.OnPickTrigger,
+            function(a,b,c,d) {
+                console.log(a,b,c,d)
+            }
+        )
+    )
+
+    // scene.onPointerDown = function (evt, pickResult) {
+    //     // if the click hits the ground object, we change the impact position
+    //     console.log(pickResult)
+    //     if (pickResult.hit) {
+    //         impact.position.x = pickResult.pickedPoint.x;
+    //         impact.position.y = pickResult.pickedPoint.y;
+    //     }
+    // };
+    return scene;
+}
+var scene = createScene();
+engine.runRenderLoop(function(){ // call every loop
+    scene.render();
+});
+//When click event is raised
+// window.addEventListener("click", function () {
+//    // We try to pick an object
+//    var pickResult = scene.pick(scene.pointerX, scene.pointerY);
+// })
+
+
+        </script>
+    </body>
+</html>

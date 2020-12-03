@@ -1,0 +1,61 @@
+<html>
+    <body>
+        <canvas id="canvas" width="600" height="600"></canvas>
+        <script src="babylon.max.js"></script>
+        <script src="vars.js"></script>
+        <script>
+            // https://www.babylonjs-playground.com/#20OAV9#325
+            var canvas = document.getElementById('canvas');
+            var engine = new Engine(canvas, true);
+            var createScene = function() {
+                var scene = new Scene(engine);
+                var camera = new ArcRotateCamera("Camera", -Math.PI / 2, Math.PI / 3, 3, BABYLON.Vector3.Zero(), scene);
+                camera.attachControl(canvas, true);
+                var mats = [
+                    new BABYLON.Color3(1, 1, 0),
+                    new BABYLON.Color3(1, 0, 1),
+                    new BABYLON.Color3(0, 1, 1),
+                    new BABYLON.Color3(1, 1, 1)
+                ]
+                var greenMat = new StandardMaterial("greenMat", scene);
+                greenMat.emissiveColor = new Color3(0, 1, 0);
+                var blueMat = new StandardMaterial("blueMat", scene);
+                blueMat.emissiveColor = new Color3(0, 0, 1);
+                var whiteMat = new StandardMaterial("whiteMat", scene);
+                whiteMat.emissiveColor = new Color3(1, 1, 1);
+                
+                var lightRed = new SpotLight("spotLight", new Vector3(-0.9, 1 , -1.8), new Vector3(0, -1, 0), Math.PI / 2, 1.5, scene);
+                    lightRed.diffuse = new BABYLON.Color3(1, 0, 0);
+                    lightRed.specular = new BABYLON.Color3(0, 0, 0);
+                var redMat = new StandardMaterial("redMat", scene);
+                    redMat.emissiveColor = new Color3(1, 0, 0);
+                var redSphere = MeshBuilder.CreateSphere("sphere", {diameter: 0.25}, scene);
+                    redSphere.material = redMat;
+                    redSphere.position = lightRed.position;
+
+                var groundMat = new StandardMaterial("groundMat", scene);
+                    groundMat.diffuseColor = mats[0];
+
+                var ground = MeshBuilder.CreateGround("ground", {width: 4, height: 6}, scene);	
+                    ground.material = groundMat;
+
+                var boxMat = new StandardMaterial("redMat", scene);
+                    boxMat.emissiveColor = new Color3(2, 1, 0);                    
+                var box = MeshBuilder.CreateBox("box", {}, scene);
+                    box.material = boxMat;
+                    box.position.z = -2;
+                    box.position.x = -0.5;
+                
+                var light = new HemisphericLight("light1", new BABYLON.Vector3(1, 0.5, 0), scene);
+                light.intensity = 0.8;
+
+                return scene;
+            }
+            var scene = createScene();
+            engine.runRenderLoop(function(){ // call every loop
+                scene.render();
+            });
+
+        </script>
+    </body>
+</html>

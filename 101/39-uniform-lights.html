@@ -1,0 +1,32 @@
+<html>
+    <body>
+        <canvas id="canvas" width="600" height="600"></canvas>
+        <script src="babylon.max.js"></script>
+        <script src="vars.js"></script>
+        <script>
+            // https://www.babylonjs-playground.com/#20OAV9#325
+            var canvas = document.getElementById('canvas');
+            var engine = new BABYLON.Engine(canvas, true);
+            var createScene = function() {
+                var scene = new BABYLON.Scene(engine);
+                var camera =  new BABYLON.ArcRotateCamera("Camera", -Math.PI/3, Math.PI/3, 10, new BABYLON.Vector3(0,0,0), scene);
+                camera.attachControl(canvas, true);
+
+                var box1 = BABYLON.MeshBuilder.CreateBox("box1", {}, scene);
+                var box2 = BABYLON.MeshBuilder.CreateBox("box1", {}, scene);
+                box2.position.z = 2;
+
+                var hemi = new BABYLON.HemisphericLight("HemiLight", new BABYLON.Vector3(0, 1, 0), scene);
+                hemi.intensity = 0.5;
+                var direc = new BABYLON.DirectionalLight('directional', new BABYLON.Vector3(-0.5, -0.7, 0.8), scene);
+                direc.intensity = 0.5;
+                return scene;
+            }
+            var scene = createScene();
+            engine.runRenderLoop(function(){ // call every loop
+                scene.render();
+            });
+
+        </script>
+    </body>
+</html>

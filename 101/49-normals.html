@@ -1,0 +1,93 @@
+<html>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+        }
+        #canvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <body>
+        <canvas id="canvas" width="600" height="600"></canvas>
+        <script src="babylon.max.js"></script>
+        <script src="babylon.gui.js"></script>
+        <script src="babylonjs.materials.min.js"></script>
+        <script src="vars.js"></script>
+        <script>
+//console.log()
+var canvas = document.getElementById('canvas');
+var engine = new Engine(canvas, true);
+function drawNormalsLines(scene, positions, normals){
+    for (var p = 0; p < positions.length; p += 3) {
+            line=BABYLON.Mesh.CreateLines("lines", [
+            new BABYLON.Vector3(
+                positions[p], 
+                positions[p+1], 
+                positions[p+2]
+            ),
+            new BABYLON.Vector3(
+                positions[p]   + normals[p]*2, 
+                positions[p+1] + normals[p+1]*2, 
+                positions[p+2] + normals[p+2]*2
+            ),
+        ], scene);
+    }
+}
+function drawVertexIndex(scene, positions) {
+    for (var p = 0; p < positions.length; p += 3) {
+        xyz = [positions[p], positions[p+1], positions[p+2]]
+        var t = makeTextPlane(p/3,"black", 1.5, xyz);
+    }
+}
+var createScene = function() {
+    var scene = new Scene(engine);
+    light(scene);
+    camera(scene);
+    showAxis(scene, 10)
+    var wireframes = wireframeMaterial(scene)
+
+    var box = MeshBuilder.CreateBox("shooter", {size: 0.1}, scene);
+    box.position.z = 2
+
+
+    //Create a custom mesh  
+    var customMesh = new BABYLON.Mesh("custom", scene);
+    
+    //Set arrays for positions and indices
+    var positions = [0, 3, 0,   -3, -3, 0,   3, -3, 0];
+    var indices = [0, 1, 2];    
+    var colors = [1, 0, 0, 1,   1, 0, 0, 1,   1, 0, 0, 1];
+    //Empty array to contain calculated values
+    var normals = [0, -1, -1,   0, 0, -1,   0, 1, -1];
+
+    // normal can be also calculated from position and indices
+    // BABYLON.VertexData.ComputeNormals(positions, indices, normals);
+    // console.log(normals)
+    
+    var vertexData = new BABYLON.VertexData();
+    //BABYLON.VertexData.ComputeNormals(positions, indices, normals);
+
+    //Assign positions, indices and normals to vertexData
+    vertexData.positions = positions;
+    vertexData.indices = indices;
+    vertexData.normals = normals;
+    vertexData.colors = colors;
+
+    vertexData.applyToMesh(customMesh, true);
+
+    drawNormalsLines(scene, positions, normals)
+    drawVertexIndex(scene, positions)
+
+    return scene;
+}
+var scene = createScene();
+engine.runRenderLoop(function(){ // call every loop
+    scene.render();
+});
+
+
+        </script>
+    </body>
+</html>

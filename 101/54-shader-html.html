@@ -1,0 +1,96 @@
+<html>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+        }
+        #canvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <body>
+        <canvas id="canvas" width="600" height="600"></canvas>
+        <script src="babylon.max.js"></script>
+        <script src="babylon.gui.js"></script>
+        <script src="babylonjs.materials.min.js"></script>
+        <script src="vars.js"></script>
+<script type="application/vertexShader" id="vertexShaderCode">
+    #ifdef GL_ES
+        precision highp float;
+    #endif
+
+    // Attributes
+    attribute vec3 position;
+    attribute vec2 uv;
+
+    // Uniforms
+    uniform mat4 worldViewProjection;
+
+    // Normal
+    varying vec2 vUV;
+
+    void main(void) {
+    gl_Position = worldViewProjection * vec4(position, 1.0);
+
+    vUV = uv;
+    }
+</script>
+<script type="application/fragmentShader" id="fragmentShaderCode">
+    #ifdef GL_ES
+        precision mediump float;
+    #endif
+
+    varying vec2 vUV;
+
+    uniform sampler2D textureSampler;
+
+    void main(void) {
+        gl_FragColor = texture2D(textureSampler, vUV);
+    }
+</script>        
+        <script>
+// https://www.babylonjs-playground.com/#20OAV9#325
+var canvas = document.getElementById('canvas');
+var engine = new Engine(canvas, true);
+var createScene = function() {
+    //https://doc.babylonjs.com/resources/shaderintro
+    var scene = new Scene(engine);
+    light(scene);
+    camera(scene);
+    var mesh = box()
+
+    var shaderMaterial = new BABYLON.ShaderMaterial("shader", scene, 
+        {
+            vertexElement: "vertexShaderCode",
+            fragmentElement: "fragmentShaderCode",
+        },
+        {
+            attributes: ["position", "normal", "uv"],
+            uniforms: [
+                "world", 
+                "worldView", 
+                "worldViewProjection", 
+                "view", 
+                "projection"
+            ]
+        }
+    );
+
+
+    var mainTexture = new BABYLON.Texture("textures/amiga.jpg", scene);
+    shaderMaterial.setTexture("textureSampler", mainTexture);
+
+    mesh.material = shaderMaterial;
+  
+    return scene;
+}
+var scene = createScene();
+engine.runRenderLoop(function(){ // call every loop
+    scene.render();
+});
+
+
+        </script>
+    </body>
+</html>

@@ -1,0 +1,51 @@
+<html>
+    <body>
+        <canvas id="canvas" width="600" height="600"></canvas>
+        <script src="babylon.max.js"></script>
+        <script src="vars.js"></script>
+        <script>
+            // https://www.babylonjs-playground.com/#20OAV9#325
+            var canvas = document.getElementById('canvas');
+            var engine = new Engine(canvas, true);
+            var createScene = function() {
+                var scene = new Scene(engine);
+                var camera = new ArcRotateCamera("Camera", -Math.PI / 2, Math.PI / 3, 3, BABYLON.Vector3.Zero(), scene);
+                    camera.attachControl(canvas, true);
+
+                scene.ambientColor = new Color3(1, 1, 1); //white
+
+                //Light direction is up and left
+                var light = new BABYLON.HemisphericLight("hemiLight", new BABYLON.Vector3(-1, 1, 0), scene);
+                light.diffuse = new BABYLON.Color3(1, 0, 0); //red
+                light.specular = new BABYLON.Color3(0, 1, 0);//green
+                light.groundColor = new BABYLON.Color3(0, 1, 0);    //green            
+	
+                var redMat = new BABYLON.StandardMaterial("redMat", scene);
+                redMat.ambientColor = new BABYLON.Color3(1, 0, 0); //red
+                
+                var greenMat = new BABYLON.StandardMaterial("redMat", scene);
+                greenMat.ambientColor = new BABYLON.Color3(0, 1, 0); //green
+                
+                //No ambient color
+                var sphere0 = BABYLON.MeshBuilder.CreateSphere("sphere0", {}, scene);
+                sphere0.position.x = -1.5;	
+                
+                //Red Ambient  
+                var sphere1 = BABYLON.MeshBuilder.CreateSphere("sphere1", {}, scene);
+                sphere1.material = redMat;
+                
+                //Green Ambient
+                var sphere2 = BABYLON.MeshBuilder.CreateSphere("sphere2", {}, scene);
+                sphere2.material = greenMat;
+                sphere2.position.x = 1.5;	
+
+                return scene;
+            }
+            var scene = createScene();
+            engine.runRenderLoop(function(){ // call every loop
+                scene.render();
+            });
+
+        </script>
+    </body>
+</html>

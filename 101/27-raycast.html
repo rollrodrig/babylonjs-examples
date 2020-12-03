@@ -1,0 +1,82 @@
+<html>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+        }
+        #canvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <body>
+        <canvas id="canvas" width="600" height="600"></canvas>
+        <script src="babylon.max.js"></script>
+        <script src="vars.js"></script>
+        <script>
+// https://www.babylonjs-playground.com/#20OAV9#325
+var canvas = document.getElementById('canvas');
+var engine = new Engine(canvas, true);
+var createScene = function() {
+    var scene = new Scene(engine);
+    var light = 
+    new BABYLON.HemisphericLight("HemiLight", new BABYLON.Vector3(0, 1, 0), scene);
+    var camera = 
+    new BABYLON.ArcRotateCamera("Camera", 
+    degToRadians(-90), degToRadians(45), 20, 
+    new BABYLON.Vector3.Zero(), scene);
+    camera.attachControl(canvas, true);
+
+    var box = MeshBuilder.CreateBox('box',{},scene);
+    box.position.x = -1;
+    var box2 = MeshBuilder.CreateBox('box2',{},scene);
+    box2.position.x = -3;
+
+    var origin = new Vector3(0,0,0);
+    var direction = new Vector3(1,0,0);
+    var length = 5;
+    // right
+    var ray = new BABYLON.Ray(origin, direction, length);
+    let rayHelper = new BABYLON.RayHelper(ray);		
+        rayHelper.show(scene);
+
+    // up
+    var ray2 = new BABYLON.Ray(new Vector3(0,0,0), new Vector3(0,1,0), length);
+    let rayHelper2 = new BABYLON.RayHelper(ray2);		
+        rayHelper2.show(scene);
+
+    // z
+    var ray3 = new BABYLON.Ray(new Vector3(0,0,0), new Vector3(0,0,1), length);
+    let rayHelper3 = new BABYLON.RayHelper(ray3);		
+        rayHelper3.show(scene);  
+    
+    // digonal x,z
+    var ray4 = new BABYLON.Ray(new Vector3(0,0,0), new Vector3(1,0,1), length);
+    let rayHelper4 = new BABYLON.RayHelper(ray4);		
+        rayHelper4.show(scene);    
+    // diagonal x,y,z
+    var ray5 = new BABYLON.Ray(new Vector3(0,0,0), new Vector3(1,1,1), length);
+    let rayHelper5 = new BABYLON.RayHelper(ray5);
+        rayHelper5.show(scene);        
+
+    // random x,y,z
+    var ray6 = new BABYLON.Ray(new Vector3(0,0,0), new Vector3(1,0.5,0.5), length);
+    let rayHelper6 = new BABYLON.RayHelper(ray6);
+        rayHelper6.show(scene);  
+
+    scene.onPointerMove = function () {
+    };
+    scene.registerBeforeRender(function () {
+    });
+    return scene;
+}
+var scene = createScene();
+engine.runRenderLoop(function(){ // call every loop
+    scene.render();
+});
+
+
+
+        </script>
+    </body>
+</html>

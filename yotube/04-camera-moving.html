@@ -1,0 +1,32 @@
+<html>
+    <body>
+        <canvas id="canvas" width="600" height="600"></canvas>
+        <script src="babylon.max.js"></script>
+        <script>
+            var canvas = document.getElementById('canvas');
+            var engine = new BABYLON.Engine(canvas, true);
+            var createScene = function() {
+                var scene = new BABYLON.Scene(engine);
+                scene.clearColor = new BABYLON.Color3.White();
+                var box = BABYLON.Mesh.CreateBox('Box', 4.0, scene);
+                var box2 = BABYLON.Mesh.CreateBox('Box2', 4.0, scene);
+                var material = new BABYLON.StandardMaterial('material1', scene);
+                material.wireframe = true;
+                box2.material =  material;
+                box2.position = new BABYLON.Vector3(0,3,0);
+                var camera = new BABYLON.FollowCamera('followCam', new BABYLON.Vector3(0,0,-20), scene);
+                // camera.target = box;
+                camera.radius = 10; // distance away to stay
+                camera.heightOffset = 0; // position relative to the target
+                camera.attachControl(canvas, true);
+                return scene;
+            }
+            var scene = createScene();
+            engine.runRenderLoop(function(){ // call every loop
+                scene.getMeshByName('Box').position.z -=0.1;
+                scene.render();
+            });
+
+        </script>
+    </body>
+</html>

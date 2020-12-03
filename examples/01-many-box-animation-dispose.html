@@ -1,0 +1,48 @@
+<html>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+        }
+        #canvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <body>
+        <canvas id="canvas" width="600" height="600"></canvas>
+        <script src="babylon.max.js"></script>
+        <script src="vars.js"></script>
+        <script>
+var canvas = document.getElementById('canvas');
+var engine = new Engine(canvas, true);
+var createScene = function() {
+    var scene = new Scene(engine);
+    var light = new HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+    var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI/3, Math.PI/3, 10, new BABYLON.Vector3(0, 0, 0), scene);
+    camera.attachControl(canvas, true);
+    setInterval(()=>{
+        createBox(random(-3, 3), scene);
+    },500)
+    return scene;
+}
+function createBox(p, scene) {
+    const b1 = MeshBuilder.CreateBox('b1', {}, scene);
+    b1.position.x = p;
+    b1.position.z = 8;
+    b1.onBeforeRenderObservable.add(()=>{
+        b1.position.z -= 0.05;
+    });
+    setTimeout(()=>{
+        b1.dispose();
+    }, Math.random()*5000)
+}
+
+var scene = createScene();
+engine.runRenderLoop(function(){ // call every loop
+    scene.render();
+});
+
+        </script>
+    </body>
+</html>

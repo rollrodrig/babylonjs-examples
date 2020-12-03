@@ -1,0 +1,55 @@
+<html>
+    <head>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            canvas {
+                width: 100%;
+                height: 100%;
+                background-color: purple;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="canvas" width="600" height="600"></canvas>
+        <script src="babylon.max.js"></script>
+        <script>
+            var canvas;
+            var engine;
+            var scene;
+            document.addEventListener("DOMContentLoaded", startGame);
+
+            var createScene = function () {
+                var scene = new BABYLON.Scene(engine);
+                scene.clearColor = new BABYLON.Color3(1, 0, 1);
+                var sphere = BABYLON.Mesh.CreateSphere("sphere1", 16, 2, scene);
+                sphere.position.y = 1;
+                var ground = BABYLON.Mesh.CreateGround("ground1", 6, 6, 2, scene);
+
+                var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+                camera.attachControl(canvas, false);
+                var light = new BABYLON.PointLight("light1", new BABYLON.Vector3(0, 5, 0));
+                light.intensity = .5;
+                light.diffuse = new BABYLON.Color3.Blue;
+                return scene;
+            };
+
+            function startGame() {
+                 canvas = document.getElementById("canvas");
+                 engine = new BABYLON.Engine(canvas, true);
+                 scene = createScene();
+
+                engine.runRenderLoop(function () {
+                    scene.render();
+                });
+
+            }
+
+            window.addEventListener("resize", function () {
+                engine.resize();
+            });
+        </script>
+    </body>
+</html>

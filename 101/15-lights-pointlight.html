@@ -1,0 +1,43 @@
+<html>
+    <body>
+        <canvas id="canvas" width="600" height="600"></canvas>
+        <script src="babylon.max.js"></script>
+        <script src="vars.js"></script>
+        <script>
+            // https://www.babylonjs-playground.com/#20OAV9#325
+            var canvas = document.getElementById('canvas');
+            var engine = new Engine(canvas, true);
+            var createScene = function() {
+                var scene = new Scene(engine);
+                var camera = new ArcRotateCamera("Camera", 
+                -Math.PI / 2, Math.PI / 3, 3, 
+                BABYLON.Vector3.Zero(), scene);
+
+                camera.attachControl(canvas, true);
+                var box1 = MeshBuilder.CreateBox("box1", {width:5, depth: 5}, scene);
+                var box2 = MeshBuilder.CreateBox("box2", {width:5, depth: 5}, scene);
+                box2.position.y = 10
+                var box3 = MeshBuilder.CreateBox("box3", {width:5, depth: 5}, scene);
+                box3.position.x = -10
+                var box4 = MeshBuilder.CreateBox("box4", {width:5, height: 5, depth: 5}, scene);
+                box4.position.x = 5;
+                box4.position.y = 5;
+                var box5 = MeshBuilder.CreateBox("box5", {width:5, height: 5, depth: 5}, scene);
+                box5.position.x = -25;
+                box5.position.y = 5;
+                
+                // var light = new HemisphericLight("light1", new BABYLON.Vector3(0, 0, 0), scene);
+                var light = new BABYLON.PointLight("pointLight", new BABYLON.Vector3(0, 5, 0), scene);
+                var lightbox = MeshBuilder.CreateSphere("lightbox", {}, scene);
+                lightbox.position = light.position;
+                
+                return scene;
+            }
+            var scene = createScene();
+            engine.runRenderLoop(function(){ // call every loop
+                scene.render();
+            });
+
+        </script>
+    </body>
+</html>

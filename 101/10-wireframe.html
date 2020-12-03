@@ -1,0 +1,35 @@
+<html>
+    <body>
+        <canvas id="canvas" width="600" height="600"></canvas>
+        <script src="babylon.max.js"></script>
+        <script src="vars.js"></script>
+        <script>
+            // https://www.babylonjs-playground.com/#20OAV9#325
+            var canvas = document.getElementById('canvas');
+            var engine = new Engine(canvas, true);
+            var createScene = function() {
+                var scene = new Scene(engine);
+                var camera = new ArcRotateCamera("Camera", -Math.PI / 2, Math.PI / 3, 3, BABYLON.Vector3.Zero(), scene);
+                    camera.attachControl(canvas, true);
+
+                scene.ambientColor = new Color3(1, 1, 1); //white
+
+                //Light direction is up and left
+                var light = new HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+                light.intensity = 0.7;
+                
+                //diffuse texture
+                var grass0 = new BABYLON.StandardMaterial("grass0", scene);
+                grass0.wireframe = true;
+                var sphere0 = BABYLON.MeshBuilder.CreateSphere("sphere0", {}, scene);
+                sphere0.material = grass0;	
+                return scene;
+            }
+            var scene = createScene();
+            engine.runRenderLoop(function(){ // call every loop
+                scene.render();
+            });
+
+        </script>
+    </body>
+</html>
