@@ -32,10 +32,11 @@ var createScene = function() {
     var box = MeshBuilder.CreateBox("shooter", {}, scene);
     var path = "/textures/iphonex/";
     var file = "iphone.obj";
-    BABYLON.SceneLoader.ImportMesh("", path, file, scene, function (newMeshes) {
+    var x = BABYLON.SceneLoader.ImportMesh("", path, file, scene, function (newMeshes) {
         // Set the target of the camera to the first imported mesh
         camera.target = newMeshes[0];
     });
+
     return scene;
 }
 var scene = createScene();

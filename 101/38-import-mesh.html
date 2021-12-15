@@ -17,6 +17,7 @@
 // https://www.babylonjs-playground.com/#20OAV9#325
 var canvas = document.getElementById('canvas');
 var engine = new Engine(canvas, true);
+var car = null
 var createScene = function() {
     var scene = new Scene(engine);
     var light = 
@@ -36,16 +37,27 @@ var createScene = function() {
         // camera.target = newMeshes[0];
     });
 
-    BABYLON.SceneLoader.ImportMesh("Cube", "/textures/", "car.babylon", scene, function (newMeshes) {
+    var result = BABYLON.SceneLoader.ImportMesh("Cube", "/textures/", "car.babylon", scene, function (result) {
         // Set the target of the camera to the first imported mesh
         // camera.target = newMeshes[0];
-    });
-    
+        console.log(result)
+        console.log(result[0])
+        car = result[0]
+        car.position.y = 4
+        car.position.x = 2
 
+    });
+
+    // console.log(result)
+    // console.log(result.meshes)
+    // console.log(result.meshes[0])
     return scene;
 }
 var scene = createScene();
 engine.runRenderLoop(function(){ // call every loop
+    if (car) {
+        car.position.x += 0.01
+    }
     scene.render();
 });
 
